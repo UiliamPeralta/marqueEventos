@@ -1,7 +1,6 @@
 package com.dev.peralta.marqueeventos.data
 
 import androidx.lifecycle.LiveData
-import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.dev.peralta.marqueeventos.model.Event
@@ -13,8 +12,9 @@ const val PAGE_SIZE = 30
 class Repository(
     private val fireStore: FirebaseFirestore,
     private val executor: Executor,
-    private val eventDataSourceFactory: EventDataSourceFactory,
-    private val eventDataSource: DataSource<DocumentSnapshot, DocumentSnapshot>) {
+    private val eventDataSourceFactory: EventDataSourceFactory ) {
+
+    private val eventDataSource = eventDataSourceFactory.create()
 
     val documentSnapshotList: LiveData<PagedList<DocumentSnapshot>>
         get() = LivePagedListBuilder(eventDataSourceFactory, PAGE_SIZE)
