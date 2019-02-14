@@ -2,7 +2,6 @@ package com.dev.peralta.marqueeventos.di
 
 import androidx.paging.DataSource
 import com.dev.peralta.marqueeventos.data.EventDataSourceFactory
-import com.dev.peralta.marqueeventos.data.EventPageKeyedDataSource
 import com.dev.peralta.marqueeventos.data.Repository
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -40,6 +39,9 @@ class AppModule {
         ): Repository =
         Repository(firestore, executor, eventDataSourceFactory, data)
 }
+
+@Module
+class EventViewModelModule
 
 
 

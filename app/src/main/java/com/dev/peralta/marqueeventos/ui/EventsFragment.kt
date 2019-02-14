@@ -26,9 +26,9 @@ class EventsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(EventViewModel::class.java)
-//        viewModel.documentSnapshotList.observe(this, Observer {
-//            buildList(it)
-//        })
+        viewModel.documentSnapshotList.observe(this, Observer {
+            buildList(it)
+        })
     }
 
     private fun buildList(pagedList: PagedList<DocumentSnapshot>) {
