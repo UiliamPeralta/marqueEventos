@@ -1,10 +1,8 @@
 package com.dev.peralta.marqueeventos.ui
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
@@ -35,5 +33,22 @@ class EventsFragment : Fragment() {
         val adapter = EventAdapter()
         adapter.submitList(pagedList)
         list.adapter = adapter
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.events_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        return when(item.itemId) {
+            R.id.action_update -> {
+                viewModel.updateAllEventsList()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

@@ -18,6 +18,8 @@ class EventPageKeyedDataSource(private val db: FirebaseFirestore) : PageKeyedDat
             if (!it.isEmpty) {
                 val lastVisible: DocumentSnapshot = it.documents.last()
                 callback.onResult(it.documents, null, lastVisible)
+                Log.i(TAG, "loadInitial ${params.requestedLoadSize}")
+
             }
         }
     }
@@ -34,7 +36,7 @@ class EventPageKeyedDataSource(private val db: FirebaseFirestore) : PageKeyedDat
             if (!it.isEmpty) {
                 val lastVisible: DocumentSnapshot = it.documents.last()
                 callback.onResult(it.documents, lastVisible)
-                Log.i(TAG, "${params.requestedLoadSize}")
+                Log.i(TAG, " loadAfter ${params.requestedLoadSize}")
             }
         }
     }

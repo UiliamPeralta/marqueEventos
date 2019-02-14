@@ -22,4 +22,7 @@ class EventViewModel : ViewModel() {
         documentSnapshotList = repository.documentSnapshotList
     }
 
+    fun updateAllEventsList() {
+        repository.invalidateDataSource()
+    }
 }
