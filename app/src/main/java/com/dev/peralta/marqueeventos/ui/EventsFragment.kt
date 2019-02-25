@@ -24,6 +24,7 @@ class EventsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(EventViewModel::class.java)
+        viewModel.updateAllEventsList()
         viewModel.documentSnapshotList.observe(this, Observer {
             buildList(it)
         })
@@ -38,6 +39,7 @@ class EventsFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.events_menu, menu)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

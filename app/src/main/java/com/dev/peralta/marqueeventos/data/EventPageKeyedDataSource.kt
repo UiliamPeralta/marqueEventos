@@ -7,14 +7,24 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
-class EventPageKeyedDataSource(private val db: FirebaseFirestore) : PageKeyedDataSource<DocumentSnapshot, DocumentSnapshot>() {
+class EventPageKeyedDataSource(private val db: FirebaseFirestore, private val cat: String) : PageKeyedDataSource<DocumentSnapshot, DocumentSnapshot>() {
     override fun loadInitial(
         params: LoadInitialParams<DocumentSnapshot>,
         callback: LoadInitialCallback<DocumentSnapshot, DocumentSnapshot>
     ) {
-        val first: Query = db.collection("events").limit(params.requestedLoadSize.toLong())
-        first.get().addOnSuccessListener {
 
+        val first: Query = if (cat.isEmpty()) {
+            db.collection("events")
+                .limit(params.requestedLoadSize.toLong())
+
+        } else {
+            db.collection("events")
+                .orderBy("desc")
+                .whereEqualTo("cat", cat)
+                .limit(params.requestedLoadSize.toLong())
+        }
+
+        first.get().addOnSuccessListener {
             if (!it.isEmpty) {
                 val lastVisible: DocumentSnapshot = it.documents.last()
                 callback.onResult(it.documents, null, lastVisible)
@@ -28,9 +38,18 @@ class EventPageKeyedDataSource(private val db: FirebaseFirestore) : PageKeyedDat
         params: LoadParams<DocumentSnapshot>,
         callback: LoadCallback<DocumentSnapshot, DocumentSnapshot>
     ) {
-        val next: Query = db.collection("events")
-            .startAfter(params.key)
-            .limit(params.requestedLoadSize.toLong())
+        val next: Query = if (cat.isEmpty()) {
+            db.collection("events")
+                .startAfter(params.key)
+                .limit(params.requestedLoadSize.toLong())
+
+        } else {
+            db.collection("events")
+                .whereEqualTo("cat", cat)
+                .orderBy("desc")
+                .startAfter(params.key)
+                .limit(params.requestedLoadSize.toLong())
+        }
 
         next.get().addOnSuccessListener {
             if (!it.isEmpty) {
