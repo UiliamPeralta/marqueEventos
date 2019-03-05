@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.fragment_events.*
 class EventsFragment : Fragment() {
     private lateinit var viewModel: EventViewModel
     private var adapter: EventAdapter? = null
+    private var category = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -22,23 +23,55 @@ class EventsFragment : Fragment() {
         return view
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("cat", category)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        category = savedInstanceState?.getString("cat") ?: ""
         viewModel = ViewModelProviders.of(this).get(EventViewModel::class.java)
+
+        documentSnapshotListObserve()
+        progressLiveDataObserve()
+        progressLoadInitialObserve()
+        isEmptyListObserve()
+    }
+
+    private fun documentSnapshotListObserve() {
         viewModel.documentSnapshotList.observe(this, Observer {
             buildList(it)
         })
+    }
 
+    private fun progressLiveDataObserve() {
         viewModel.progressLiveData.observe(this, Observer {
             adapter?.setStatus(it)
         })
-
+    }
+    private fun progressLoadInitialObserve() {
         viewModel.progressLoadInitial.observe(this, Observer {
-            progressBar.visibility = if (it) View.VISIBLE else View.INVISIBLE
+            if(it) {
+                progressBar.visibility = View.VISIBLE
+                viewMessage.visibility = View.VISIBLE
+                viewMessage.text = getString(R.string.load)
+            } else {
+                progressBar.visibility = View.INVISIBLE
+                viewMessage.visibility = View.INVISIBLE
+            }
         })
+    }
 
+    private fun isEmptyListObserve() {
         viewModel.isEmptyList.observe(this, Observer {
-            nenhumDado.visibility = if (it) View.VISIBLE else View.INVISIBLE
+            if(it) {
+                viewMessage.visibility = View.VISIBLE
+                viewMessage.text = getString(R.string.nenhum_dado)
+            } else {
+
+                viewMessage.visibility = View.INVISIBLE
+            }
         })
     }
 
@@ -59,10 +92,9 @@ class EventsFragment : Fragment() {
 
         return when(item.itemId) {
             R.id.action_update -> {
-                viewModel.updateAllEventsList("")
+                viewModel.refreshAllEventsList(category)
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }

@@ -36,13 +36,13 @@ class EventViewModel : ViewModel() {
         App.getInstance()
             .getEventViewModelComponent()
             .inject(this)
-        updateAllEventsList()
+        refreshAllEventsList()
         progressLiveData = repository.progressLiveData
         progressLoadInitial = repository.progressLoadInitial
         isEmptyList = repository.isEmptyList
     }
 
-    fun updateAllEventsList(cat: String = "") {
+    fun refreshAllEventsList(cat: String = "") {
         refreshLiveData.postValue(cat)
     }
 
