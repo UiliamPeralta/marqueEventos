@@ -5,4 +5,6 @@
             app:startDestination="@id/eventosFragment">
     <fragment android:id="@+id/eventosFragment" android:name="com.dev.peralta.marqueeventos.ui.EventsFragment"
               android:label="fragment_eventos_list" tools:layout="@layout/fragment_events"/>
+    <fragment android:id="@+id/newEventFragment" android:name="com.dev.peralta.marqueeventos.ui.NewEventFragment"
+              android:label="fragment_new_event" tools:layout="@layout/fragment_new_event"/>
 </navigation>

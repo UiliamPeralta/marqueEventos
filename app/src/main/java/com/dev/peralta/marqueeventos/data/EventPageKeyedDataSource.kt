@@ -27,6 +27,7 @@ class EventPageKeyedDataSource(private val db: FirebaseFirestore, private val ca
         callback: LoadInitialCallback<DocumentSnapshot, DocumentSnapshot>
     ) {
         progressLoadInitial.postValue(true)
+        progressLiveData.postValue(false)
         val first: Query = if (cat.isEmpty()) {
             db.collection("events")
                 .orderBy("time")

@@ -2,6 +2,8 @@ package com.dev.peralta.marqueeventos.ui
 
 import android.os.Bundle
 import android.view.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -23,20 +25,38 @@ class EventsFragment : Fragment() {
         return view
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString("cat", category)
+    private fun spinnerCreate() {
+        val adapter = ArrayAdapter.createFromResource(
+            activity!!,
+            R.array.categorias,
+            R.layout.support_simple_spinner_dropdown_item)
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+        spinner.onItemSelectedListener = getOnItemSelectedListener()
+
+    }
+
+    private fun getOnItemSelectedListener() = object : AdapterView.OnItemSelectedListener {
+        override fun onNothingSelected(parent: AdapterView<*>?) {
+
+        }
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            val cats = resources.getStringArray(R.array.categorias)
+            category = if (position == 0) "" else cats[position]
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        category = savedInstanceState?.getString("cat") ?: ""
         viewModel = ViewModelProviders.of(this).get(EventViewModel::class.java)
-
+        spinnerCreate()
         documentSnapshotListObserve()
         progressLiveDataObserve()
         progressLoadInitialObserve()
         isEmptyListObserve()
+        btBuscar.setOnClickListener {
+            viewModel.refreshAllEventsList(category)
+        }
     }
 
     private fun documentSnapshotListObserve() {

@@ -3,7 +3,12 @@
     <string name="atualizar">Atualizar</string>
     <string name="nenhum_dado">Nenhum Dado</string>
     <string name="load">Carregando…</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cat">Categorias</string>
+    <string name="buscar">Buscar</string>
+    <string-array name="categorias">
+        <item>Todas</item>
+        <item>Festas</item>
+        <item>Coleta de Lixo</item>
+        <item>Matiada</item>
+    </string-array>
 </resources>
