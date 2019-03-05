@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Marque Eventos</string>
     <string name="atualizar">Atualizar</string>
+    <string name="nenhum_dado">Nenhum Dado</string>
 </resources>

@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_events.*
 
 class EventsFragment : Fragment() {
     private lateinit var viewModel: EventViewModel
+    private var adapter: EventAdapter? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -24,14 +25,26 @@ class EventsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(EventViewModel::class.java)
-        viewModel.updateAllEventsList()
         viewModel.documentSnapshotList.observe(this, Observer {
             buildList(it)
+        })
+
+        viewModel.progressLiveData.observe(this, Observer {
+            adapter?.setStatus(it)
+        })
+
+        viewModel.progressLoadInitial.observe(this, Observer {
+            progressBar.visibility = if (it) View.VISIBLE else View.INVISIBLE
+        })
+
+        viewModel.isEmptyList.observe(this, Observer {
+            nenhumDado.visibility = if (it) View.VISIBLE else View.INVISIBLE
         })
     }
 
     private fun buildList(pagedList: PagedList<DocumentSnapshot>) {
         val adapter = EventAdapter()
+        this.adapter = adapter
         adapter.submitList(pagedList)
         list.adapter = adapter
     }
@@ -46,7 +59,7 @@ class EventsFragment : Fragment() {
 
         return when(item.itemId) {
             R.id.action_update -> {
-                viewModel.updateAllEventsList()
+                viewModel.updateAllEventsList("")
                 true
             }
 

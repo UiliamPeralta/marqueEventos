@@ -20,23 +20,30 @@ class EventViewModel : ViewModel() {
     @Inject
     lateinit var repository: Repository
 
-    private val refreshLiveData = MutableLiveData<Boolean>()
+    private val refreshLiveData = MutableLiveData<String>()
+
+    val progressLiveData: LiveData<Boolean>
+    val progressLoadInitial:  LiveData<Boolean>
+    val isEmptyList: LiveData<Boolean>
 
     val documentSnapshotList: LiveData<PagedList<DocumentSnapshot>> =
         Transformations.switchMap(refreshLiveData) {
             repository.invalidateDataSource()
-            repository.updateList()
+            repository.updateList(it)
         }
 
     init {
         App.getInstance()
             .getEventViewModelComponent()
             .inject(this)
-       // insertEvents()
+        updateAllEventsList()
+        progressLiveData = repository.progressLiveData
+        progressLoadInitial = repository.progressLoadInitial
+        isEmptyList = repository.isEmptyList
     }
 
-    fun updateAllEventsList() {
-        refreshLiveData.postValue(true)
+    fun updateAllEventsList(cat: String = "") {
+        refreshLiveData.postValue(cat)
     }
 
     private fun insertEvents() {

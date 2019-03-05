@@ -12,7 +12,6 @@ class EventDataSourceFactory(private val db: FirebaseFirestore) : DataSource.Fac
     val sourceLiveData = MutableLiveData<EventPageKeyedDataSource>()
     override fun create(): DataSource<DocumentSnapshot, DocumentSnapshot> {
         val source = EventPageKeyedDataSource(db, cat)
-        Log.i(TAG, "EventDataSourceFactory")
         sourceLiveData.postValue(source)
         return source
     }

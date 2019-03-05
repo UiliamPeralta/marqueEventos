@@ -19,11 +19,6 @@ class Repository(
 
     private var eventDataSource: DataSource<DocumentSnapshot, DocumentSnapshot>? = null
 
-    val documentSnapshotList: LiveData<PagedList<DocumentSnapshot>>
-        get() = LivePagedListBuilder(eventDataSourceFactory, PAGE_SIZE)
-            .setFetchExecutor(executor)
-            .build()
-
     fun updateList(cat: String = ""): LiveData<PagedList<DocumentSnapshot>>{
         eventDataSourceFactory.cat = cat
         eventDataSource = eventDataSourceFactory.create()
@@ -32,9 +27,17 @@ class Repository(
             .build()
     }
 
-//    val progress = Transformations.switchMap(eventDataSourceFactory.sourceLiveData) {
-//        liveData em dataSource indicando progresso
-//    }
+    val progressLiveData = Transformations.switchMap(eventDataSourceFactory.sourceLiveData) {
+        it.getProgressLiveData
+    }
+
+    val progressLoadInitial = Transformations.switchMap(eventDataSourceFactory.sourceLiveData) {
+        it.getProgressLoadInitial
+    }
+
+    val isEmptyList = Transformations.switchMap(eventDataSourceFactory.sourceLiveData) {
+        it.getIsEmptyList
+    }
 
     fun invalidateDataSource() = eventDataSource?.invalidate()
 
