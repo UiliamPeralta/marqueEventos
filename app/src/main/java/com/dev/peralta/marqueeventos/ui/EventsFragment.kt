@@ -16,6 +16,7 @@ class EventsFragment : Fragment() {
     private lateinit var viewModel: EventViewModel
     private var adapter: EventAdapter? = null
     private var category = ""
+    private var isLoad = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -72,24 +73,22 @@ class EventsFragment : Fragment() {
     }
     private fun progressLoadInitialObserve() {
         viewModel.progressLoadInitial.observe(this, Observer {
+            isLoad = it
+            viewMessage.visibility = View.INVISIBLE
             if(it) {
                 progressBar.visibility = View.VISIBLE
-                viewMessage.visibility = View.VISIBLE
-                viewMessage.text = getString(R.string.load)
             } else {
                 progressBar.visibility = View.INVISIBLE
-                viewMessage.visibility = View.INVISIBLE
             }
         })
     }
 
     private fun isEmptyListObserve() {
         viewModel.isEmptyList.observe(this, Observer {
-            if(it) {
+            if(it && !isLoad) {
                 viewMessage.visibility = View.VISIBLE
                 viewMessage.text = getString(R.string.nenhum_dado)
             } else {
-
                 viewMessage.visibility = View.INVISIBLE
             }
         })
@@ -119,3 +118,7 @@ class EventsFragment : Fragment() {
         }
     }
 }
+
+
+
+

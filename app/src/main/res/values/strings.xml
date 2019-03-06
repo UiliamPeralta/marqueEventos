@@ -3,8 +3,10 @@
     <string name="atualizar">Atualizar</string>
     <string name="nenhum_dado">Nenhum Dado</string>
     <string name="load">Carregando…</string>
-    <string name="cat">Categorias</string>
+    <string name="cat">Categoria</string>
     <string name="buscar">Buscar</string>
+    <string name="estado">Estado</string>
+    <string name="cidade">Cidade</string>
     <string-array name="categorias">
         <item>Todas</item>
         <item>Festas</item>

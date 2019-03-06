@@ -7,5 +7,5 @@ data class Event(
     val desc: String,
     val cat: String,
     val time: Timestamp,
-    val local: GeoPoint,
-    val city: Map<String, String>)
+    val point: GeoPoint,
+    val local: Map<String, String>)
